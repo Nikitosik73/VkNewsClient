@@ -23,9 +23,8 @@ class MainActivity : ComponentActivity() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(
-                            color = MaterialTheme.colorScheme.background
-                        ).padding(8.dp)
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(8.dp)
                 ) {
                     PostCard()
                 }
