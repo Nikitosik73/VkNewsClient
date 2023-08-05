@@ -1,5 +1,6 @@
 package ru.paramonov.vknewsclient.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -29,7 +30,8 @@ import ru.paramonov.vknewsclient.ui.theme.VkNewsClientTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
-    val snackbarState = SnackbarHostState()
+    val snackbarState = remember { SnackbarHostState() }
+    Log.d("MainScreen", snackbarState.currentSnackbarData.toString())
     val scope = rememberCoroutineScope()
     val fabIsVisible = remember { mutableStateOf(true) }
     Scaffold(
