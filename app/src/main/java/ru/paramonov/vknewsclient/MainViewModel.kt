@@ -11,6 +11,14 @@ class MainViewModel : ViewModel() {
     private val _feedPost = MutableLiveData(FeedPost())
     val feedPost: LiveData<FeedPost> = _feedPost
 
+    private val _isFollowing = MutableLiveData<Boolean>()
+    val isFollowing: LiveData<Boolean> = _isFollowing
+
+    fun changeFollow() {
+        val currentFollow = _isFollowing.value ?: false
+        _isFollowing.value = !currentFollow
+    }
+
     fun updateCount(item: StatisticItem) {
         val currentStatistic = _feedPost.value?.statistics ?: throw IllegalStateException()
         val newStatistic = currentStatistic.toMutableList().apply {
