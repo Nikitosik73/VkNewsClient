@@ -22,14 +22,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             VkNewsClientTheme {
-                Test(viewModel = viewModel)
+                TestLazyColumn(viewModel = viewModel)
             }
         }
     }
 }
 
 @Composable
-private fun Test(viewModel: MainViewModel) {
+private fun TestLazyColumn(viewModel: MainViewModel) {
     LazyColumn {
         item {
             Text(text = "Title", fontSize = 24.sp)
