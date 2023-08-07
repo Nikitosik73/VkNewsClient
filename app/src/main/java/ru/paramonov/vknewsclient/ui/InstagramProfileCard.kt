@@ -1,6 +1,6 @@
 package ru.paramonov.vknewsclient.ui
 
-import android.widget.Space
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,10 +21,12 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,18 +35,25 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.paramonov.vknewsclient.MainViewModel
 import ru.paramonov.vknewsclient.R
-import ru.paramonov.vknewsclient.ui.theme.VkNewsClientTheme
 
 @Composable
 fun InstagramProfileCard(
     viewModel: MainViewModel
 ) {
+    Log.d("RECOMPOSITION", "InstagramProfileCard")
     val isFollowed = viewModel.isFollowing.observeAsState(initial = false)
+
+    /*
+    пример делегатов - ненужно обращать к свойству value
+    var number: Int by remember { mutableStateOf(5) }
+
+    val num = number
+    number = 10
+     */
 
     Card(
         shape = RoundedCornerShape(
@@ -59,6 +68,7 @@ fun InstagramProfileCard(
         ),
         modifier = Modifier.padding(8.dp)
     ) {
+        Log.d("RECOMPOSITION", "Card")
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
@@ -92,7 +102,7 @@ fun InstagramProfileCard(
             Text(text = "#LerningJetpackCompose")
             Text(text = "@Nikitosik_73")
 
-            FollowButton(isFollowed = isFollowed.value) {
+            FollowButton(isFollowed = isFollowed) {
                 viewModel.changeFollow()
             }
         }
@@ -101,21 +111,22 @@ fun InstagramProfileCard(
 
 @Composable
 fun FollowButton(
-    isFollowed: Boolean,
+    isFollowed: State<Boolean>,
     clickListener: () -> Unit
 ) {
+    Log.d("RECOMPOSITION", "FollowButton")
     Button(
         onClick = { clickListener() },
         colors = ButtonDefaults.buttonColors(
             contentColor = MaterialTheme.colorScheme.primary,
-            containerColor = if(isFollowed) {
+            containerColor = if(isFollowed.value) {
                 MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
             } else {
                 MaterialTheme.colorScheme.onPrimary
             }
         )
     ) {
-        val text = if (isFollowed) "Unfollow" else "Follow"
+        val text = if (isFollowed.value) "Unfollow" else "Follow"
         Text(text = text)
     }
 }
