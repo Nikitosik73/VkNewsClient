@@ -13,25 +13,21 @@ import ru.paramonov.vknewsclient.R
 
 sealed class NavigationItem(
     val titleResId: Int,
-    val icon: ImageVector,
-    val iconFocused: ImageVector
+    val icon: ImageVector
 ) {
 
     object Home : NavigationItem(
         titleResId = R.string.navigation_item_main,
         icon = Icons.Outlined.Home,
-        iconFocused = Icons.Filled.Home
     )
 
     object Favorite : NavigationItem(
         titleResId = R.string.navigation_item_favorite,
-        icon = Icons.Outlined.FavoriteBorder,
-        iconFocused = Icons.Outlined.Favorite
+        icon = Icons.Outlined.FavoriteBorder
     )
 
     object Profile : NavigationItem(
         titleResId = R.string.navigation_item_profile,
-        icon = Icons.Outlined.Person,
-        iconFocused = Icons.Filled.Person
+        icon = Icons.Outlined.Person
     )
 }
