@@ -10,20 +10,22 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ru.paramonov.vknewsclient.MainViewModel
 import ru.paramonov.vknewsclient.domain.FeedPost
 import ru.paramonov.vknewsclient.ui.theme.VkNewsClientTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
-
-    val feedPost = remember { mutableStateOf(FeedPost()) }
+fun MainScreen(
+    viewModel: MainViewModel
+) {
 
     Scaffold(
         bottomBar = {
@@ -61,24 +63,16 @@ fun MainScreen() {
         }
     ) { innerPadding ->
 
+        val feedPost = viewModel.feedPost.observeAsState(FeedPost())
         PostCard(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(8.dp),
             feedPost = feedPost.value,
-            onStatisticsItemCLickListener = { newItem ->
-                val oldStatistics = feedPost.value.statistics
-                val newStatistics = oldStatistics.toMutableList().apply {
-                    replaceAll { oldItem ->
-                        if (oldItem.type == newItem.type) {
-                            oldItem.copy(count = oldItem.count + 1)
-                        } else {
-                            oldItem
-                        }
-                    }
-                }
-                feedPost.value = feedPost.value.copy(statistics = newStatistics)
-            }
+            onViewsClickListener = viewModel::updateCount,
+            onSharesClickListener = viewModel::updateCount,
+            onCommentsClickListener = viewModel::updateCount,
+            onLikesClickListener = viewModel::updateCount
         )
     }
 }
@@ -89,7 +83,7 @@ fun LightPreviewMain() {
     VkNewsClientTheme(
         darkTheme = false
     ) {
-        MainScreen()
+        MainScreen(viewModel = MainViewModel())
     }
 }
 
@@ -99,6 +93,6 @@ fun DarkPreviewMain() {
     VkNewsClientTheme(
         darkTheme = true
     ) {
-        MainScreen()
+        MainScreen(viewModel = MainViewModel())
     }
 }
