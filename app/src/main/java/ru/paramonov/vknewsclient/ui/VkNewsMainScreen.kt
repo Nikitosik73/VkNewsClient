@@ -1,6 +1,12 @@
 package ru.paramonov.vknewsclient.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -8,7 +14,9 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +29,7 @@ import ru.paramonov.vknewsclient.MainViewModel
 import ru.paramonov.vknewsclient.domain.FeedPost
 import ru.paramonov.vknewsclient.ui.theme.VkNewsClientTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel
@@ -62,37 +70,49 @@ fun MainScreen(
             }
         }
     ) { innerPadding ->
+        val feedPosts = viewModel.feedPosts.observeAsState(emptyList())
 
-        val feedPost = viewModel.feedPost.observeAsState(FeedPost())
-        PostCard(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(8.dp),
-            feedPost = feedPost.value,
-            onViewsClickListener = viewModel::updateCount,
-            onSharesClickListener = viewModel::updateCount,
-            onCommentsClickListener = viewModel::updateCount,
-            onLikesClickListener = viewModel::updateCount
-        )
-    }
-}
+        LazyColumn(
+            modifier = Modifier.padding(innerPadding),
+            contentPadding = PaddingValues(
+                top = 16.dp,
+                start = 8.dp,
+                end = 8.dp,
+                bottom = 16.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(feedPosts.value, key = { it.id }) { feedPost ->
+                val dismissState = rememberDismissState()
 
-@Preview
-@Composable
-fun LightPreviewMain() {
-    VkNewsClientTheme(
-        darkTheme = false
-    ) {
-        MainScreen(viewModel = MainViewModel())
-    }
-}
+                if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                    viewModel.deletePost(feedPost)
+                }
 
-@Preview
-@Composable
-fun DarkPreviewMain() {
-    VkNewsClientTheme(
-        darkTheme = true
-    ) {
-        MainScreen(viewModel = MainViewModel())
+                SwipeToDismiss(
+                    modifier = Modifier.animateItemPlacement(),
+                    state = dismissState,
+                    directions = setOf(DismissDirection.EndToStart),
+                    background = {},
+                    dismissContent = {
+                        PostCard(
+                            feedPost = feedPost,
+                            onViewsClickListener = { statisticItem ->
+                                viewModel.updateCount(feedPost = feedPost, item = statisticItem)
+                            },
+                            onSharesClickListener = { statisticItem ->
+                                viewModel.updateCount(feedPost = feedPost, item = statisticItem)
+                            },
+                            onCommentsClickListener = { statisticItem ->
+                                viewModel.updateCount(feedPost = feedPost, item = statisticItem)
+                            },
+                            onLikesClickListener = { statisticItem ->
+                                viewModel.updateCount(feedPost = feedPost, item = statisticItem)
+                            }
+                        )
+                    }
+                )
+            }
+        }
     }
 }
