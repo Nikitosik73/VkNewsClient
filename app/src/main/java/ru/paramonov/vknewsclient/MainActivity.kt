@@ -1,17 +1,22 @@
 package ru.paramonov.vknewsclient
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.sp
-import ru.paramonov.vknewsclient.ui.MainScreen
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import ru.paramonov.vknewsclient.ui.theme.VkNewsClientTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,31 +26,30 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            VkNewsClientTheme {
-                TestLazyColumn(viewModel = viewModel)
-            }
+            TestLazyColumn(viewModel = viewModel)
         }
     }
 }
 
 @Composable
 private fun TestLazyColumn(viewModel: MainViewModel) {
-    LazyColumn {
-        item {
-            Text(text = "Title", fontSize = 24.sp)
-        }
-        items(10) {
-            InstagramProfileCard(viewModel = viewModel)
-        }
-        item {
-            Image(
-                painter = painterResource(id = R.drawable.img),
-                contentDescription = null
-            )
-        }
-        items(200) {
-            Log.d("test_lazy_column", "number: $it")
-            InstagramProfileCard(viewModel = viewModel)
+    VkNewsClientTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            val models = viewModel.models.observeAsState(emptyList())
+            LazyVerticalGrid(columns = GridCells.Fixed(count = 2)) {
+                items(models.value) { model ->
+                    InstagramProfileCard(
+                        model = model,
+                        onFollowButtonClickListener = { instagramModel ->
+                            viewModel.changeFollowingStatus(instagramModel)
+                        }
+                    )
+                }
+            }
         }
     }
 }

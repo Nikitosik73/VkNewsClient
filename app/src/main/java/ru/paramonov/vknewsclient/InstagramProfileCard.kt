@@ -37,11 +37,9 @@ import ru.paramonov.vknewsclient.ui.theme.VkNewsClientTheme
 
 @Composable
 fun InstagramProfileCard(
-    viewModel: MainViewModel
+    model: InstagramModel,
+    onFollowButtonClickListener: (InstagramModel) -> Unit
 ) {
-
-    val isFollowed = viewModel.isFollowing.observeAsState(false)
-
     Card(
         border = BorderStroke(
             width = 2.dp, MaterialTheme.colorScheme.onPrimary
@@ -78,16 +76,16 @@ fun InstagramProfileCard(
             }
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "Instagram",
+                text = "Instagram ${model.id}",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.Cursive
             )
-            Text(text = "#LearningJetpackCompose")
+            Text(text = "#${model.title}")
             Text(text = "@Nikitosik_123")
 
-            FollowButton(isFollowed = isFollowed) {
-                viewModel.changeFollow()
+            FollowButton(isFollowed = model.isFollowed) {
+                onFollowButtonClickListener(model)
             }
         }
     }
@@ -95,13 +93,13 @@ fun InstagramProfileCard(
 
 @Composable
 private fun FollowButton(
-    isFollowed: State<Boolean>,
+    isFollowed: Boolean,
     onClickListener: () -> Unit
 ) {
     Button(
         onClick = { onClickListener() },
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isFollowed.value) {
+            containerColor = if (isFollowed) {
                 MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
             } else {
                 MaterialTheme.colorScheme.onPrimary
@@ -109,7 +107,7 @@ private fun FollowButton(
             contentColor = MaterialTheme.colorScheme.primary
         )
     ) {
-        val text = if (isFollowed.value) "Unfollow" else "Follow"
+        val text = if (isFollowed) "Unfollow" else "Follow"
         Text(text = text)
     }
 }
@@ -135,25 +133,5 @@ fun UserStatistics(
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp
         )
-    }
-}
-
-@Preview
-@Composable
-private fun LightTheme() {
-    VkNewsClientTheme(
-        darkTheme = false
-    ) {
-        InstagramProfileCard(viewModel = MainViewModel())
-    }
-}
-
-@Preview
-@Composable
-private fun DarkTheme() {
-    VkNewsClientTheme(
-        darkTheme = true
-    ) {
-        InstagramProfileCard(viewModel = MainViewModel())
     }
 }
