@@ -39,6 +39,12 @@ class MainViewModel : ViewModel() {
         _models.value = modifiedList
     }
 
+    fun deleteItem(model: InstagramModel) {
+        val modifiedList = _models.value?.toMutableList() ?: mutableListOf()
+        modifiedList.remove(model)
+        _models.value = modifiedList
+    }
+
     fun updateCount(item: StatisticItem) {
         val currentStatistic = _feedPost.value?.statistics ?: throw IllegalStateException()
         val modifiedStatistic = currentStatistic.toMutableList().apply {
