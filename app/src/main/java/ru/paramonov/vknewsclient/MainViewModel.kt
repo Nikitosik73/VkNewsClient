@@ -5,49 +5,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.paramonov.vknewsclient.domain.FeedPost
 import ru.paramonov.vknewsclient.domain.StatisticItem
+import ru.paramonov.vknewsclient.instatest.InstagramModel
 import kotlin.random.Random
 
 class MainViewModel : ViewModel() {
 
-    private val _feedPost = MutableLiveData(FeedPost())
-    val feedPost: LiveData<FeedPost> = _feedPost
-
-    private val initialList = mutableListOf<InstagramModel>().apply {
-        repeat(500) {
-            add(
-                InstagramModel(
-                    id = it,
-                    title = "Title $it",
-                    isFollowed = Random.nextBoolean()
-                )
-            )
+    private val initialList = mutableListOf<FeedPost>().apply {
+        repeat(10) {
+            add(FeedPost(id = it))
         }
     }
 
-    private val _models = MutableLiveData<List<InstagramModel>>(initialList)
-    val models: LiveData<List<InstagramModel>> = _models
+    private val _feedPosts = MutableLiveData<List<FeedPost>>(initialList)
+    val feedPosts: LiveData<List<FeedPost>> = _feedPosts
 
-    fun changeFollowingStatus(model: InstagramModel) {
-        val modifiedList = _models.value?.toMutableList() ?: mutableListOf()
-        modifiedList.replaceAll { instagramModel ->
-            if (instagramModel == model) {
-                instagramModel.copy(isFollowed = !instagramModel.isFollowed)
-            } else {
-                instagramModel
-            }
-        }
-        _models.value = modifiedList
-    }
-
-    fun deleteItem(model: InstagramModel) {
-        val modifiedList = _models.value?.toMutableList() ?: mutableListOf()
-        modifiedList.remove(model)
-        _models.value = modifiedList
-    }
-
-    fun updateCount(item: StatisticItem) {
-        val currentStatistic = _feedPost.value?.statistics ?: throw IllegalStateException()
-        val modifiedStatistic = currentStatistic.toMutableList().apply {
+    fun updateCount(feedPost: FeedPost, item: StatisticItem) {
+        val currentFeedPost = _feedPosts.value?.toMutableList() ?: mutableListOf()
+        val currentStatistics = feedPost.statistics
+        val modifiedStatistics = currentStatistics.toMutableList().apply {
             replaceAll { currentItem ->
                 if (currentItem.type == item.type) {
                     currentItem.copy(count = currentItem.count + 1)
@@ -56,6 +31,21 @@ class MainViewModel : ViewModel() {
                 }
             }
         }
-        _feedPost.value = _feedPost.value?.copy(statistics = modifiedStatistic)
+        val modifiedFeedPost = feedPost.copy(statistics = modifiedStatistics)
+        _feedPosts.value = currentFeedPost.apply {
+            replaceAll { currentFeedPost ->
+                if (currentFeedPost.id == modifiedFeedPost.id) {
+                    modifiedFeedPost
+                } else {
+                    currentFeedPost
+                }
+            }
+        }
+    }
+
+    fun deletePost(feedPost: FeedPost) {
+        val modifiedList = _feedPosts.value?.toMutableList() ?: mutableListOf()
+        modifiedList.remove(feedPost)
+        _feedPosts.value = modifiedList
     }
 }
