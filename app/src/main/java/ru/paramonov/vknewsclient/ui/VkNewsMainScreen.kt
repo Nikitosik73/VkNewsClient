@@ -21,17 +21,20 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.paramonov.vknewsclient.MainViewModel
 import ru.paramonov.vknewsclient.navigation.AppNavGraph
+import ru.paramonov.vknewsclient.navigation.NavigationState
 import ru.paramonov.vknewsclient.navigation.Screen
+import ru.paramonov.vknewsclient.navigation.rememberNavigationState
 
 @Composable
 fun MainScreen(
     viewModel: MainViewModel
 ) {
-    val navController = rememberNavController()
+    val navigationState = rememberNavigationState()
+
     Scaffold(
         bottomBar = {
             NavigationBar {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination?.route
 
                 val items = listOf(
@@ -43,15 +46,7 @@ fun MainScreen(
                 items.forEach { item ->
                     NavigationBarItem(
                         selected = currentDestination == item.screen.route,
-                        onClick = {
-                            navController.navigate(route = item.screen.route) {
-                                popUpTo(route = Screen.NewsFeed.route) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
+                        onClick = { navigationState.navigateTo(route = item.screen.route) },
                         icon = {
                             Icon(
                                 imageVector = item.icon,
@@ -73,7 +68,7 @@ fun MainScreen(
         }
     ) { innerPadding ->
         AppNavGraph(
-            navHostController = navController,
+            navHostController = navigationState.navHostController,
             homeScreenContent = {
                 HomeScreen(viewModel = viewModel, paddingValues = innerPadding)
             },
