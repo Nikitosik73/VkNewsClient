@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.paramonov.vknewsclient.MainViewModel
 import ru.paramonov.vknewsclient.navigation.AppNavGraph
+import ru.paramonov.vknewsclient.navigation.Screen
 
 @Composable
 fun MainScreen(
@@ -42,7 +44,13 @@ fun MainScreen(
                     NavigationBarItem(
                         selected = currentDestination == item.screen.route,
                         onClick = {
-                            navController.navigate(route = item.screen.route)
+                            navController.navigate(route = item.screen.route) {
+                                popUpTo(route = Screen.NewsFeed.route) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         },
                         icon = {
                             Icon(
@@ -77,7 +85,7 @@ fun MainScreen(
 
 @Composable
 private fun TextCounter(name: String) {
-    var count by remember { mutableIntStateOf(0) }
+    var count by rememberSaveable { mutableIntStateOf(0) }
 
     Text(
         text = "$name count: $count",
