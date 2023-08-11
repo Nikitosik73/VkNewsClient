@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.paramonov.vknewsclient.domain.FeedPost
 import ru.paramonov.vknewsclient.domain.StatisticItem
-import ru.paramonov.vknewsclient.ui.NavigationItem
+import ru.paramonov.vknewsclient.ui.HomeScreenState
 
 class MainViewModel : ViewModel() {
 
@@ -15,11 +15,13 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    private val _feedPosts = MutableLiveData<List<FeedPost>>(initialList)
-    val feedPosts: LiveData<List<FeedPost>> = _feedPosts
+    private val initialState = HomeScreenState.Posts(posts = initialList)
+
+    private val _screenState = MutableLiveData<HomeScreenState>(initialState)
+    val screenState: LiveData<HomeScreenState> = _screenState
 
     fun updateCount(feedPost: FeedPost, item: StatisticItem) {
-        val currentFeedPost = _feedPosts.value?.toMutableList() ?: mutableListOf()
+        val currentFeedPost = _screenState.value?.toMutableList() ?: mutableListOf()
         val currentStatistics = feedPost.statistics
         val modifiedStatistics = currentStatistics.toMutableList().apply {
             replaceAll { currentItem ->
@@ -31,7 +33,7 @@ class MainViewModel : ViewModel() {
             }
         }
         val modifiedFeedPost = feedPost.copy(statistics = modifiedStatistics)
-        _feedPosts.value = currentFeedPost.apply {
+        _screenState.value = currentFeedPost.apply {
             replaceAll { currentFeedPost ->
                 if (currentFeedPost.id == modifiedFeedPost.id) {
                     modifiedFeedPost
@@ -43,8 +45,8 @@ class MainViewModel : ViewModel() {
     }
 
     fun deletePost(feedPost: FeedPost) {
-        val modifiedList = _feedPosts.value?.toMutableList() ?: mutableListOf()
+        val modifiedList = _screenState.value?.toMutableList() ?: mutableListOf()
         modifiedList.remove(feedPost)
-        _feedPosts.value = modifiedList
+        _screenState.value = modifiedList
     }
 }
