@@ -6,16 +6,18 @@ import androidx.lifecycle.ViewModel
 import ru.paramonov.vknewsclient.domain.FeedPost
 import ru.paramonov.vknewsclient.domain.PostComment
 
-class CommentsViewModel : ViewModel() {
+class CommentsViewModel(
+    post: FeedPost
+) : ViewModel() {
 
     private val _screenState = MutableLiveData<CommentsScreenState>(CommentsScreenState.Initial)
     val screenState: LiveData<CommentsScreenState> = _screenState
 
     init {
-        loadComments(FeedPost())
+        loadComments(feedPost = post)
     }
 
-    fun loadComments(feedPost: FeedPost) {
+    private fun loadComments(feedPost: FeedPost) {
         val comments = mutableListOf<PostComment>().apply {
             repeat(10) {
                 add(PostComment(id = it))
