@@ -71,4 +71,6 @@ dependencies {
 
     val navVersion = "2.7.0"
     implementation("androidx.navigation:navigation-compose:$navVersion")
+    // Init ViewModel in Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 }
