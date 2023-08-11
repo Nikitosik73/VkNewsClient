@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.ui
+package ru.paramonov.vknewsclient.screens.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,14 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.paramonov.vknewsclient.R
 import ru.paramonov.vknewsclient.domain.FeedPost
 import ru.paramonov.vknewsclient.domain.StatisticItem
 import ru.paramonov.vknewsclient.domain.StatisticType
-import ru.paramonov.vknewsclient.ui.theme.VkNewsClientTheme
 
 @Composable
 fun PostCard(
