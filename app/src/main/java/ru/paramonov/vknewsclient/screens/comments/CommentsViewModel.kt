@@ -7,14 +7,14 @@ import ru.paramonov.vknewsclient.domain.FeedPost
 import ru.paramonov.vknewsclient.domain.PostComment
 
 class CommentsViewModel(
-    post: FeedPost
+    feedPost: FeedPost
 ) : ViewModel() {
 
     private val _screenState = MutableLiveData<CommentsScreenState>(CommentsScreenState.Initial)
     val screenState: LiveData<CommentsScreenState> = _screenState
 
     init {
-        loadComments(feedPost = post)
+        loadComments(feedPost = feedPost)
     }
 
     private fun loadComments(feedPost: FeedPost) {

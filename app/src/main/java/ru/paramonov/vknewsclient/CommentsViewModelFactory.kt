@@ -11,7 +11,7 @@ class CommentsViewModelFactory(
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass == CommentsViewModel::class.java) {
-            return CommentsViewModel(post = feedPost) as T
+            return CommentsViewModel(feedPost = feedPost) as T
         }
         throw IllegalStateException("Unable constructor viewModel")
     }
