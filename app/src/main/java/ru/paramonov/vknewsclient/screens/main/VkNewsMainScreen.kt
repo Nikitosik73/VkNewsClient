@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.paramonov.vknewsclient.domain.FeedPost
 import ru.paramonov.vknewsclient.navigation.AppNavGraph
@@ -47,9 +48,17 @@ fun MainScreen() {
                 )
 
                 items.forEach { item ->
+                    val selectedItem = navBackStackEntry?.destination?.hierarchy?.any {
+                        it.route == item.screen.route
+                    } ?: false
+
                     NavigationBarItem(
-                        selected = currentDestination == item.screen.route,
-                        onClick = { navigationState.navigateTo(route = item.screen.route) },
+                        selected = selectedItem,
+                        onClick = {
+                            if (!selectedItem) {
+                                navigationState.navigateTo(route = item.screen.route)
+                            }
+                        },
                         icon = {
                             Icon(
                                 imageVector = item.icon,
@@ -77,13 +86,13 @@ fun MainScreen() {
                     paddingValues = innerPadding,
                     onCommentsClickListener = {
                         commentsToPost.value = it
-                        navigationState.navigateTo(route = Screen.Comments.route)
+                        navigationState.navigateToComments()
                     }
                 )
             },
             commentsScreenContent = {
                 CommentsScreen(
-                    onBackPressed = { commentsToPost.value = null },
+                    onBackPressed = { navigationState.navHostController.popBackStack() },
                     feedPost = commentsToPost.value!!
                 )
             },
