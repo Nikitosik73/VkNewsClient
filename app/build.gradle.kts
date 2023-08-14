@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -73,4 +74,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$navVersion")
     // Init ViewModel in Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    // Gson
+    val gsonVersion = "2.10.1"
+    implementation("com.google.code.gson:gson:$gsonVersion")
 }
