@@ -85,15 +85,14 @@ fun MainScreen() {
                 HomeScreen(
                     paddingValues = innerPadding,
                     onCommentsClickListener = {
-                        commentsToPost.value = it
-                        navigationState.navigateToComments()
+                        navigationState.navigateToComments(it)
                     }
                 )
             },
-            commentsScreenContent = {
+            commentsScreenContent = { feedPost ->
                 CommentsScreen(
                     onBackPressed = { navigationState.navHostController.popBackStack() },
-                    feedPost = commentsToPost.value!!
+                    feedPost = feedPost
                 )
             },
             favoriteScreenContent = { TextCounter(name = "Favorite") },
