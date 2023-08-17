@@ -79,4 +79,7 @@ dependencies {
     implementation("com.google.code.gson:gson:$gsonVersion")
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
+    // Vk
+    implementation("com.vk:android-sdk-core:4.1.0")
+    implementation("com.vk:android-sdk-api:4.1.0")
 }
