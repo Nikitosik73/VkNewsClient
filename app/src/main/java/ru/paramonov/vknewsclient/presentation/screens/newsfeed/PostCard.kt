@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import ru.paramonov.vknewsclient.R
 import ru.paramonov.vknewsclient.domain.FeedPost
 import ru.paramonov.vknewsclient.domain.StatisticItem
@@ -55,11 +56,9 @@ fun PostCard(
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp),
-                painter = painterResource(id = feedPost.contentImageResId),
+            AsyncImage(
+                modifier = Modifier.fillMaxWidth(),
+                model = feedPost.contentImageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
@@ -83,13 +82,11 @@ private fun PostHeader(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
+        AsyncImage(
             modifier = Modifier
                 .size(56.dp)
                 .clip(shape = CircleShape),
-            painter = painterResource(
-                id = feedPost.avatarResId
-            ),
+            model = feedPost.communityImageUrl,
             contentDescription = null
         )
         Spacer(modifier = Modifier.width(8.dp))

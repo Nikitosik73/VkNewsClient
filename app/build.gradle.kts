@@ -68,7 +68,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    implementation("androidx.compose.runtime:runtime-livedata:1.4.3")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.0")
 
     val navVersion = "2.7.0"
     implementation("androidx.navigation:navigation-compose:$navVersion")
@@ -82,4 +82,13 @@ dependencies {
     // Vk
     implementation("com.vk:android-sdk-core:4.1.0")
     implementation("com.vk:android-sdk-api:4.1.0")
+    // Retrofit
+    val retrofitVersion = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+
+    // OkHTTP
+    val okhttpVersion = "4.9.3"
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
+
 }
