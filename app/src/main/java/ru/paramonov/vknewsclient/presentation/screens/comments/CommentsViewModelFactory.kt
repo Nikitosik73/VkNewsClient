@@ -1,9 +1,8 @@
-package ru.paramonov.vknewsclient
+package ru.paramonov.vknewsclient.presentation.screens.comments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import ru.paramonov.vknewsclient.domain.FeedPost
-import ru.paramonov.vknewsclient.screens.comments.CommentsViewModel
 
 class CommentsViewModelFactory(
     private val feedPost: FeedPost

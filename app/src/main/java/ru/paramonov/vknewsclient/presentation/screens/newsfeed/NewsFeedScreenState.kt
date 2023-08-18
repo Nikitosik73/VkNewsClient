@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.screens.newsfeed
+package ru.paramonov.vknewsclient.presentation.screens.newsfeed
 
 import ru.paramonov.vknewsclient.domain.FeedPost
 

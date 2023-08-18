@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.screens.newsfeed
+package ru.paramonov.vknewsclient.presentation.screens.newsfeed
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

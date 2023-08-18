@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.screens.newsfeed
+package ru.paramonov.vknewsclient.presentation.screens.newsfeed
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -16,10 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.paramonov.vknewsclient.domain.FeedPost
-import ru.paramonov.vknewsclient.screens.main.PostCard
 
 @Composable
-fun HomeScreen(
+fun NewsFeedScreen(
     paddingValues: PaddingValues,
     onCommentsClickListener: (FeedPost) -> Unit
 ) {
