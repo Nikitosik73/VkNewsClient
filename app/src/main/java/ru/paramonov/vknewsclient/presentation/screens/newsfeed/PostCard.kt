@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.screens.main
+package ru.paramonov.vknewsclient.presentation.screens.newsfeed
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

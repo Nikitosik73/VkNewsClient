@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient
+package ru.paramonov.vknewsclient.samples
 
 import android.os.Handler
 import androidx.compose.foundation.layout.Column

@@ -8,10 +8,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKScope
-import ru.paramonov.vknewsclient.screens.login.AuthViewModel
-import ru.paramonov.vknewsclient.screens.login.AuthViewState
-import ru.paramonov.vknewsclient.screens.login.LoginScreen
-import ru.paramonov.vknewsclient.screens.main.MainScreen
+import ru.paramonov.vknewsclient.presentation.screens.login.AuthViewModel
+import ru.paramonov.vknewsclient.presentation.screens.login.AuthViewState
+import ru.paramonov.vknewsclient.presentation.screens.login.LoginScreen
+import ru.paramonov.vknewsclient.presentation.screens.main.MainScreen
 import ru.paramonov.vknewsclient.ui.theme.VkNewsClientTheme
 
 class MainActivity : ComponentActivity() {

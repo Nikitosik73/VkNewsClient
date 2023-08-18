@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.screens.main
+package ru.paramonov.vknewsclient.presentation.screens.main
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Icon
@@ -20,8 +20,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.paramonov.vknewsclient.navigation.AppNavGraph
 import ru.paramonov.vknewsclient.navigation.rememberNavigationState
-import ru.paramonov.vknewsclient.screens.comments.CommentsScreen
-import ru.paramonov.vknewsclient.screens.newsfeed.HomeScreen
+import ru.paramonov.vknewsclient.presentation.screens.comments.CommentsScreen
+import ru.paramonov.vknewsclient.presentation.screens.newsfeed.NewsFeedScreen
 
 @Composable
 fun MainScreen() {
@@ -73,7 +73,7 @@ fun MainScreen() {
         AppNavGraph(
             navHostController = navigationState.navHostController,
             newsFeedScreenContent = {
-                HomeScreen(
+                NewsFeedScreen(
                     paddingValues = innerPadding,
                     onCommentsClickListener = {
                         navigationState.navigateToComments(it)

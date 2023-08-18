@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.screens.main
+package ru.paramonov.vknewsclient.presentation.screens.main
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FavoriteBorder

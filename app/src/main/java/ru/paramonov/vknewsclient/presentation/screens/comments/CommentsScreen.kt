@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.screens.comments
+package ru.paramonov.vknewsclient.presentation.screens.comments
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,7 +30,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.paramonov.vknewsclient.CommentsViewModelFactory
 import ru.paramonov.vknewsclient.R
 import ru.paramonov.vknewsclient.domain.FeedPost
 import ru.paramonov.vknewsclient.domain.PostComment

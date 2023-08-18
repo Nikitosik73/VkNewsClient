@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.screens.comments
+package ru.paramonov.vknewsclient.presentation.screens.comments
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
