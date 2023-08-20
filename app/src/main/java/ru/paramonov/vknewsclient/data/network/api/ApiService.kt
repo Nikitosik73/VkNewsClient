@@ -13,6 +13,13 @@ interface ApiService {
         @Query(FILTERS) post: String = "post"
     ): NewsFeedResponseDto
 
+    @GET("newsfeed.get?v=5.131")
+    suspend fun getAllPosts(
+        @Query(ACCESS_TOKEN) token: String,
+        @Query(FILTERS) post: String = "post",
+        @Query(START_FROM) startFrom: String
+    ): NewsFeedResponseDto
+
     @GET("likes.add?v=5.131")
     suspend fun addLike(
         @Query(ACCESS_TOKEN) token: String,
@@ -35,5 +42,6 @@ interface ApiService {
         private const val OWNER_ID = "owner_id"
         private const val ITEM_ID = "item_id"
         private const val TYPE = "type"
+        private const val START_FROM = "start_from"
     }
 }
