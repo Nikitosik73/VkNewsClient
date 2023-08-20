@@ -23,11 +23,21 @@ class NewsFeedRepository(
     val feedPost: List<FeedPost>
         get() = _feedPosts.toList()
 
+    private var nextFrom: String? = null
+
     suspend fun loadAllNewsFeed(): List<FeedPost> {
-        val response = apiService.getAllPosts(getAccessToken())
+        val startFrom = nextFrom
+        if (startFrom == null && feedPost.isNotEmpty()) return feedPost
+
+        val response = if (startFrom == null) {
+            apiService.getAllPosts(getAccessToken())
+        } else {
+            apiService.getAllPosts(token = getAccessToken(), startFrom = startFrom)
+        }
+        nextFrom = response.newsFeedContent.nextFrom
         val posts = mapper.mapResponseToNewsFeed(response = response)
         _feedPosts.addAll(posts)
-        return posts
+        return feedPost
     }
 
     suspend fun changeLikeStatus(feedPost: FeedPost) {
