@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -42,7 +43,14 @@ fun NewsFeedScreen(
                 nextDataIsLoading = currentState.nextDataLoading
             )
         }
-
+        is NewsFeedScreenState.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = VkDefault)
+            }
+        }
         NewsFeedScreenState.Initial -> {}
     }
 }
@@ -73,7 +81,9 @@ private fun FeedPosts(
             val dismissState = rememberDismissState()
 
             if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-                viewModel.deletePost(feedPost)
+                SideEffect {
+                    viewModel.deletePost(feedPost)
+                }
             }
 
             SwipeToDismiss(
@@ -84,12 +94,6 @@ private fun FeedPosts(
                 dismissContent = {
                     PostCard(
                         feedPost = feedPost,
-                        onViewsClickListener = { statisticItem ->
-                            viewModel.updateCount(feedPost = feedPost, item = statisticItem)
-                        },
-                        onSharesClickListener = { statisticItem ->
-                            viewModel.updateCount(feedPost = feedPost, item = statisticItem)
-                        },
                         onCommentsClickListener = {
                             onCommentsClickListener(feedPost)
                         },
