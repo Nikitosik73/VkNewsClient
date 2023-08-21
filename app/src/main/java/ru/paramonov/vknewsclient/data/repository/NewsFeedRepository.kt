@@ -3,6 +3,7 @@ package ru.paramonov.vknewsclient.data.repository
 import android.app.Application
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
+import kotlinx.coroutines.delay
 import ru.paramonov.vknewsclient.data.mapper.NewsFeedMapper
 import ru.paramonov.vknewsclient.data.network.api.ApiFactory
 import ru.paramonov.vknewsclient.domain.FeedPost
@@ -78,6 +79,7 @@ class NewsFeedRepository(
     }
 
     suspend fun loadComments(feedPost: FeedPost): List<PostComment> {
+        delay(2000)
         val response = apiService.getComments(
             token = getAccessToken(),
             ownerId = feedPost.communityId,
