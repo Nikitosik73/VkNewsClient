@@ -3,6 +3,7 @@ package ru.paramonov.vknewsclient.data.network.api
 import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.paramonov.vknewsclient.data.network.model.NewsFeedResponseDto
+import ru.paramonov.vknewsclient.data.network.model.comments.CommentsResponseDto
 import ru.paramonov.vknewsclient.data.network.model.likes.LikesCountResponseDto
 
 interface ApiService {
@@ -44,6 +45,15 @@ interface ApiService {
         @Query(ITEM_ID) itemId: Long
     )
 
+    @GET("wall.getComments?v=5.131")
+    suspend fun getComments(
+        @Query(ACCESS_TOKEN) token: String,
+        @Query(OWNER_ID) ownerId: Long,
+        @Query(POST_ID) postId: Long,
+        @Query(EXTENDED) extended: Int = 1,
+        @Query(FIELDS) field: String = "photo_200"
+    ): CommentsResponseDto
+
     companion object {
         private const val ACCESS_TOKEN = "access_token"
         private const val FILTERS = "filters"
@@ -53,5 +63,8 @@ interface ApiService {
         private const val TYPE_POST = "post"
         private const val TYPE_WALL = "wall"
         private const val START_FROM = "start_from"
+        private const val POST_ID = "post_id"
+        private const val EXTENDED = "extended"
+        private const val FIELDS = "fields"
     }
 }

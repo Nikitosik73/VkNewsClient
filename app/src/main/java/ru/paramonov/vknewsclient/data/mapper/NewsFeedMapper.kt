@@ -1,7 +1,9 @@
 package ru.paramonov.vknewsclient.data.mapper
 
 import ru.paramonov.vknewsclient.data.network.model.NewsFeedResponseDto
+import ru.paramonov.vknewsclient.data.network.model.comments.CommentsResponseDto
 import ru.paramonov.vknewsclient.domain.FeedPost
+import ru.paramonov.vknewsclient.domain.PostComment
 import ru.paramonov.vknewsclient.domain.StatisticItem
 import ru.paramonov.vknewsclient.domain.StatisticType
 import java.text.SimpleDateFormat
@@ -23,7 +25,7 @@ class NewsFeedMapper {
             val feedPost = FeedPost(
                 id = post.id,
                 communityId = post.communityId,
-                datePublication = mapTimestampToDate(post.date * 1000),
+                datePublication = mapTimestampToDate(post.date),
                 communityName = group.name,
                 communityImageUrl = group.imageUrl,
                 contentText = post.text,
@@ -41,8 +43,30 @@ class NewsFeedMapper {
         return result
     }
 
+    fun mapResponseToPostComments(response: CommentsResponseDto): List<PostComment> {
+        val result = mutableListOf<PostComment>()
+
+        val comments = response.commentsContent.comments
+        val profiles = response.commentsContent.profiles
+
+        for (comment in comments) {
+            if (comment.text.isBlank()) continue
+
+            val profile = profiles.firstOrNull { it.id == comment.fromId } ?: continue
+            val postComment = PostComment(
+                id = comment.id,
+                authorName = "${profile.lastName} ${profile.firstName}",
+                commentText = comment.text,
+                datePublication = mapTimestampToDate(comment.date),
+                avatarUrl = profile.photoUrl
+            )
+            result.add(postComment)
+        }
+        return result
+    }
+
     private fun mapTimestampToDate(timestamp: Long): String {
-        val date = Date(timestamp)
+        val date = Date(timestamp * 1000)
         return SimpleDateFormat("d MMMM yyyy, hh:mm", Locale.getDefault()).format(date)
     }
 }
