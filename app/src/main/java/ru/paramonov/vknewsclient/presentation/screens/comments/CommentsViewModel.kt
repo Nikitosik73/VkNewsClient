@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.paramonov.vknewsclient.data.repository.NewsFeedRepository
 import ru.paramonov.vknewsclient.domain.FeedPost
-import ru.paramonov.vknewsclient.domain.PostComment
 
 class CommentsViewModel(
     feedPost: FeedPost,
@@ -21,6 +20,7 @@ class CommentsViewModel(
     private val repository = NewsFeedRepository(application)
 
     init {
+        _screenState.value = CommentsScreenState.Loading
         loadComments(feedPost = feedPost)
     }
 
