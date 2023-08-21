@@ -6,6 +6,7 @@ import com.vk.api.sdk.auth.VKAccessToken
 import ru.paramonov.vknewsclient.data.mapper.NewsFeedMapper
 import ru.paramonov.vknewsclient.data.network.api.ApiFactory
 import ru.paramonov.vknewsclient.domain.FeedPost
+import ru.paramonov.vknewsclient.domain.PostComment
 import ru.paramonov.vknewsclient.domain.StatisticItem
 import ru.paramonov.vknewsclient.domain.StatisticType
 
@@ -74,6 +75,15 @@ class NewsFeedRepository(
         )
         val currentPostIndex = _feedPosts.indexOf(feedPost)
         _feedPosts[currentPostIndex] = modifiedPost
+    }
+
+    suspend fun loadComments(feedPost: FeedPost): List<PostComment> {
+        val response = apiService.getComments(
+            token = getAccessToken(),
+            ownerId = feedPost.communityId,
+            postId = feedPost.id
+        )
+        return mapper.mapResponseToPostComments(response = response)
     }
 
     private fun getAccessToken(): String {
