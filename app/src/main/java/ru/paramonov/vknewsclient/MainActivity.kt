@@ -4,12 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKScope
 import ru.paramonov.vknewsclient.presentation.screens.login.AuthViewModel
-import ru.paramonov.vknewsclient.presentation.screens.login.AuthViewState
+import ru.paramonov.vknewsclient.domain.AuthState
 import ru.paramonov.vknewsclient.presentation.screens.login.LoginScreen
 import ru.paramonov.vknewsclient.presentation.screens.main.MainScreen
 import ru.paramonov.vknewsclient.ui.theme.VkNewsClientTheme
@@ -20,23 +21,23 @@ class MainActivity : ComponentActivity() {
         setContent {
             VkNewsClientTheme {
                 val viewModel: AuthViewModel = viewModel()
-                val viewState = viewModel.viewState.observeAsState(AuthViewState.Initial)
+                val viewState = viewModel.viewState.collectAsState(AuthState.Initial)
 
                 val authLauncher = rememberLauncherForActivityResult(
                     contract = VK.getVKAuthActivityResultContract(),
-                    onResult = { viewModel.performAuthResult(it) }
+                    onResult = { viewModel.performAuthResult() }
                 )
 
                 when(viewState.value) {
-                    is AuthViewState.Authorized -> {
+                    is AuthState.Authorized -> {
                         MainScreen()
                     }
-                    is AuthViewState.NotAuthorized -> {
+                    is AuthState.NotAuthorized -> {
                         LoginScreen {
                             authLauncher.launch(listOf(VKScope.WALL, VKScope.FRIENDS))
                         }
                     }
-                    is AuthViewState.Initial -> {}
+                    is AuthState.Initial -> {}
                 }
             }
         }
