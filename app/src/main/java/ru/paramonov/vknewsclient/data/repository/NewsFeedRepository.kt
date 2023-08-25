@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 import ru.paramonov.vknewsclient.data.mapper.NewsFeedMapper
 import ru.paramonov.vknewsclient.data.network.api.ApiFactory
+import ru.paramonov.vknewsclient.domain.AuthState
 import ru.paramonov.vknewsclient.domain.FeedPost
 import ru.paramonov.vknewsclient.domain.PostComment
 import ru.paramonov.vknewsclient.domain.StatisticItem
@@ -26,7 +27,8 @@ class NewsFeedRepository(
 ) {
 
     private val storage = VKPreferencesKeyValueStorage(application)
-    private val token = VKAccessToken.restore(storage)
+    private val token
+        get() = VKAccessToken.restore(storage)
 
     private val scope = CoroutineScope(Dispatchers.Default)
 
@@ -65,6 +67,22 @@ class NewsFeedRepository(
 
     private var nextFrom: String? = null
 
+    private val checkAuthStateEvents = MutableSharedFlow<Unit>(replay = 1)
+
+    val authStateFlow: Flow<AuthState> = flow {
+        checkAuthStateEvents.emit(Unit)
+        checkAuthStateEvents.collect {
+            val currentToken = token
+            val loggedIn = currentToken != null && currentToken.isValid
+            val authStata = if (loggedIn) AuthState.Authorized else AuthState.NotAuthorized
+            emit(authStata)
+        }
+    }.stateIn(
+        scope = scope,
+        started = SharingStarted.Lazily,
+        initialValue = AuthState.Initial
+    )
+
     val allNewsFeed: StateFlow<List<FeedPost>> = loadedAllNewsFeedFLow
         .mergeWith(another = refreshedListFlow)
         .stateIn(
@@ -75,6 +93,10 @@ class NewsFeedRepository(
 
     suspend fun loadNextData() {
         neededNextDataEvents.emit(Unit)
+    }
+
+    suspend fun checkAuthState() {
+        checkAuthStateEvents.emit(Unit)
     }
 
     suspend fun deletePost(feedPost: FeedPost) {
