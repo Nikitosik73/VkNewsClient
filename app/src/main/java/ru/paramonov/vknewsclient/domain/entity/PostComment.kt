@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.domain
+package ru.paramonov.vknewsclient.domain.entity
 
 data class PostComment(
     val id: Long,

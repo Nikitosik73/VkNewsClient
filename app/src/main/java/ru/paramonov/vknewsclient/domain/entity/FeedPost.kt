@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.domain
+package ru.paramonov.vknewsclient.domain.entity
 
 import android.os.Bundle
 import android.os.Parcelable

@@ -28,9 +28,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import ru.paramonov.vknewsclient.R
-import ru.paramonov.vknewsclient.domain.FeedPost
-import ru.paramonov.vknewsclient.domain.StatisticItem
-import ru.paramonov.vknewsclient.domain.StatisticType
+import ru.paramonov.vknewsclient.domain.entity.FeedPost
+import ru.paramonov.vknewsclient.domain.entity.StatisticItem
+import ru.paramonov.vknewsclient.domain.entity.StatisticType
 import ru.paramonov.vknewsclient.ui.theme.VKRed
 
 @Composable
