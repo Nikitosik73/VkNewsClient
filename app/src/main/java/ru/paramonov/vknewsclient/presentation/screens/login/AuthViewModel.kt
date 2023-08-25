@@ -2,24 +2,24 @@ package ru.paramonov.vknewsclient.presentation.screens.login
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.vk.api.sdk.VKPreferencesKeyValueStorage
-import com.vk.api.sdk.auth.VKAccessToken
-import com.vk.api.sdk.auth.VKAuthenticationResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import ru.paramonov.vknewsclient.data.repository.NewsFeedRepository
-import ru.paramonov.vknewsclient.domain.AuthState
+import ru.paramonov.vknewsclient.data.repository.NewsFeedRepositoryImpl
+import ru.paramonov.vknewsclient.domain.entity.AuthState
+import ru.paramonov.vknewsclient.domain.usecase.CheckAuthStateUseCase
+import ru.paramonov.vknewsclient.domain.usecase.GetAuthStateUseCase
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = NewsFeedRepository(application)
+    private val repository = NewsFeedRepositoryImpl(application)
 
-    val viewState: Flow<AuthState> = repository.authStateFlow
+    private val getAuthStateUseCase = GetAuthStateUseCase(repository)
+    private val checkAuthStateUseCase = CheckAuthStateUseCase(repository)
+
+    val viewState: Flow<AuthState> = getAuthStateUseCase()
 
     fun performAuthResult() = viewModelScope.launch {
-        repository.checkAuthState()
+        checkAuthStateUseCase()
     }
 }

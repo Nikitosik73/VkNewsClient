@@ -2,10 +2,10 @@ package ru.paramonov.vknewsclient.data.mapper
 
 import ru.paramonov.vknewsclient.data.network.model.NewsFeedResponseDto
 import ru.paramonov.vknewsclient.data.network.model.comments.CommentsResponseDto
-import ru.paramonov.vknewsclient.domain.FeedPost
-import ru.paramonov.vknewsclient.domain.PostComment
-import ru.paramonov.vknewsclient.domain.StatisticItem
-import ru.paramonov.vknewsclient.domain.StatisticType
+import ru.paramonov.vknewsclient.domain.entity.FeedPost
+import ru.paramonov.vknewsclient.domain.entity.PostComment
+import ru.paramonov.vknewsclient.domain.entity.StatisticItem
+import ru.paramonov.vknewsclient.domain.entity.StatisticType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

@@ -1,6 +1,6 @@
 package ru.paramonov.vknewsclient.presentation.screens.newsfeed
 
-import ru.paramonov.vknewsclient.domain.FeedPost
+import ru.paramonov.vknewsclient.domain.entity.FeedPost
 
 sealed class NewsFeedScreenState {
 

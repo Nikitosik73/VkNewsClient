@@ -1,7 +1,7 @@
 package ru.paramonov.vknewsclient.presentation.screens.comments
 
-import ru.paramonov.vknewsclient.domain.FeedPost
-import ru.paramonov.vknewsclient.domain.PostComment
+import ru.paramonov.vknewsclient.domain.entity.FeedPost
+import ru.paramonov.vknewsclient.domain.entity.PostComment
 
 sealed class CommentsScreenState {
 

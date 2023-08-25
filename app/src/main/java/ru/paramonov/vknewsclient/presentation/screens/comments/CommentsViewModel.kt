@@ -1,26 +1,26 @@
 package ru.paramonov.vknewsclient.presentation.screens.comments
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
-import ru.paramonov.vknewsclient.data.repository.NewsFeedRepository
-import ru.paramonov.vknewsclient.domain.FeedPost
+import ru.paramonov.vknewsclient.data.repository.NewsFeedRepositoryImpl
+import ru.paramonov.vknewsclient.domain.entity.FeedPost
+import ru.paramonov.vknewsclient.domain.usecase.GetCommentsUseCase
 
 class CommentsViewModel(
     feedPost: FeedPost,
     application: Application
 ) : ViewModel() {
 
-    private val repository = NewsFeedRepository(application)
+    private val repository = NewsFeedRepositoryImpl(application)
 
-    val screenState: Flow<CommentsScreenState> = repository.loadComments(feedPost = feedPost)
+    private val getCommentsUseCase = GetCommentsUseCase(repository)
+
+    val screenState: Flow<CommentsScreenState> = getCommentsUseCase(feedPost = feedPost)
         .map {
             CommentsScreenState.Comments(
                 feedPost = feedPost,
