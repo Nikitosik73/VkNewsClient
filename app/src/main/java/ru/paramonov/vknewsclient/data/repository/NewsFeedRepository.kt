@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 import ru.paramonov.vknewsclient.data.mapper.NewsFeedMapper
 import ru.paramonov.vknewsclient.data.network.api.ApiFactory
@@ -50,13 +51,16 @@ class NewsFeedRepository(
             _feedPosts.addAll(posts)
             emit(feedPosts)
         }
+    }.retry {
+        delay(RETRY_TIMEOUT_MILLIS)
+        true
     }
 
     private val apiService = ApiFactory.apiService
     private val mapper = NewsFeedMapper()
 
     private val _feedPosts = mutableListOf<FeedPost>()
-    val feedPosts: List<FeedPost>
+    private val feedPosts: List<FeedPost>
         get() = _feedPosts.toList()
 
     private var nextFrom: String? = null
@@ -111,17 +115,25 @@ class NewsFeedRepository(
         refreshedListFlow.emit(feedPosts)
     }
 
-    suspend fun loadComments(feedPost: FeedPost): List<PostComment> {
-        delay(2000)
+    fun loadComments(feedPost: FeedPost): Flow<List<PostComment>> = flow {
+        delay(1000)
         val response = apiService.getComments(
             token = getAccessToken(),
             ownerId = feedPost.communityId,
             postId = feedPost.id
         )
-        return mapper.mapResponseToPostComments(response = response)
+        emit(mapper.mapResponseToPostComments(response = response))
+    }.retry {
+        delay(RETRY_TIMEOUT_MILLIS)
+        true
     }
 
     private fun getAccessToken(): String {
         return token?.accessToken ?: throw IllegalStateException("token is null")
+    }
+
+    companion object {
+
+        private const val RETRY_TIMEOUT_MILLIS = 3000L
     }
 }
