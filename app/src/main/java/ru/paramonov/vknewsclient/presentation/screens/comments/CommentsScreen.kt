@@ -1,7 +1,5 @@
 package ru.paramonov.vknewsclient.presentation.screens.comments
 
-import android.app.Application
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,7 +31,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -43,19 +40,16 @@ import coil.compose.AsyncImage
 import ru.paramonov.vknewsclient.R
 import ru.paramonov.vknewsclient.domain.entity.FeedPost
 import ru.paramonov.vknewsclient.domain.entity.PostComment
-import ru.paramonov.vknewsclient.ui.theme.VkDefault
+import ru.paramonov.vknewsclient.presentation.ui.theme.VkDefault
+import ru.paramonov.vknewsclient.presentation.viewmodelfactory.ViewModelFactory
 
 @Composable
 fun CommentsScreen(
+    viewModelFactory: ViewModelFactory,
     onBackPressed: () -> Unit,
     feedPost: FeedPost
 ) {
-    val viewModel: CommentsViewModel = viewModel(
-        factory = CommentsViewModelFactory(
-            feedPost = feedPost,
-            application = LocalContext.current.applicationContext as Application
-        )
-    )
+    val viewModel: CommentsViewModel = viewModel(factory = viewModelFactory)
     val screenState = viewModel.screenState.collectAsState(CommentsScreenState.Initial)
 
     when (val currentState = screenState.value) {

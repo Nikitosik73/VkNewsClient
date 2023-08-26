@@ -1,6 +1,5 @@
 package ru.paramonov.vknewsclient.data.repository
 
-import android.app.Application
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
 import kotlinx.coroutines.CoroutineScope
@@ -14,7 +13,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 import ru.paramonov.vknewsclient.data.mapper.NewsFeedMapper
-import ru.paramonov.vknewsclient.data.network.api.ApiFactory
+import ru.paramonov.vknewsclient.data.network.api.ApiService
 import ru.paramonov.vknewsclient.domain.entity.AuthState
 import ru.paramonov.vknewsclient.domain.entity.FeedPost
 import ru.paramonov.vknewsclient.domain.entity.PostComment
@@ -22,12 +21,13 @@ import ru.paramonov.vknewsclient.domain.entity.StatisticItem
 import ru.paramonov.vknewsclient.domain.entity.StatisticType
 import ru.paramonov.vknewsclient.domain.repository.NewsFeedRepository
 import ru.paramonov.vknewsclient.extensions.mergeWith
+import javax.inject.Inject
 
-class NewsFeedRepositoryImpl(
-    application: Application
+class NewsFeedRepositoryImpl @Inject constructor(
+    private val apiService: ApiService,
+    private val mapper: NewsFeedMapper,
+    private val storage: VKPreferencesKeyValueStorage
 ): NewsFeedRepository {
-
-    private val storage = VKPreferencesKeyValueStorage(application)
     private val token
         get() = VKAccessToken.restore(storage)
 
@@ -58,9 +58,6 @@ class NewsFeedRepositoryImpl(
         delay(RETRY_TIMEOUT_MILLIS)
         true
     }
-
-    private val apiService = ApiFactory.apiService
-    private val mapper = NewsFeedMapper()
 
     private val _feedPosts = mutableListOf<FeedPost>()
     private val feedPosts: List<FeedPost>

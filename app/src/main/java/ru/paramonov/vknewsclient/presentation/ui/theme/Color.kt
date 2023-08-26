@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.ui.theme
+package ru.paramonov.vknewsclient.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

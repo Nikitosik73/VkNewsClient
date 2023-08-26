@@ -1,4 +1,4 @@
-package ru.paramonov.vknewsclient.ui.theme
+package ru.paramonov.vknewsclient.presentation.ui.theme
 
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
