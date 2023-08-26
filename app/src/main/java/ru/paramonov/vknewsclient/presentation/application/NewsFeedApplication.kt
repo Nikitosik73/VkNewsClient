@@ -8,19 +8,6 @@ class NewsFeedApplication : Application() {
 
     val component by lazy {
         DaggerApplicationComponent.factory()
-            .create(
-                context = this,
-                feedPost = FeedPost(
-                    id = 0,
-                    communityId = 0,
-                    communityName = "",
-                    datePublication = "",
-                    communityImageUrl = "",
-                    contentText = "",
-                    contentImageUrl = "",
-                    statistics = listOf(),
-                    isLiked = false
-                )
-            )
+            .create(context = this)
     }
 }

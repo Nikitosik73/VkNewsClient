@@ -21,13 +21,14 @@ import ru.paramonov.vknewsclient.presentation.MainActivity
 interface ApplicationComponent {
 
     fun inject(activity: MainActivity)
+    
+    fun getCommentsScreenFactory(): CommentsScreenSubcomponent.Factory
 
     @Component.Factory
     interface Factory {
 
         fun create(
-            @BindsInstance context: Context,
-            @BindsInstance feedPost: FeedPost
+            @BindsInstance context: Context
         ): ApplicationComponent
     }
 }
