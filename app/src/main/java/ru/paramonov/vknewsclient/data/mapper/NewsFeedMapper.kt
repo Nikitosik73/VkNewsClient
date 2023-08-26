@@ -9,9 +9,10 @@ import ru.paramonov.vknewsclient.domain.entity.StatisticType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-class NewsFeedMapper {
+class NewsFeedMapper @Inject constructor(){
 
     fun mapResponseToNewsFeed(response: NewsFeedResponseDto): List<FeedPost> {
 

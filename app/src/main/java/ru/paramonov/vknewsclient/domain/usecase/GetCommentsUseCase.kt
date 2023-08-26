@@ -4,8 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import ru.paramonov.vknewsclient.domain.entity.FeedPost
 import ru.paramonov.vknewsclient.domain.entity.PostComment
 import ru.paramonov.vknewsclient.domain.repository.NewsFeedRepository
+import javax.inject.Inject
 
-class GetCommentsUseCase(
+class GetCommentsUseCase @Inject constructor(
     private val repository: NewsFeedRepository
 ) {
 

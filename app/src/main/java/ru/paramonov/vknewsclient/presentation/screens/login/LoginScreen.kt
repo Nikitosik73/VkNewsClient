@@ -23,8 +23,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.paramonov.vknewsclient.R
-import ru.paramonov.vknewsclient.ui.theme.LightGray
-import ru.paramonov.vknewsclient.ui.theme.VkDefault
+import ru.paramonov.vknewsclient.presentation.ui.theme.LightGray
+import ru.paramonov.vknewsclient.presentation.ui.theme.VkDefault
 
 @Composable
 fun LoginScreen(

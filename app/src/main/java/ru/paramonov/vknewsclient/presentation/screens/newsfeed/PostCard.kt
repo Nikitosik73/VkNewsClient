@@ -31,7 +31,7 @@ import ru.paramonov.vknewsclient.R
 import ru.paramonov.vknewsclient.domain.entity.FeedPost
 import ru.paramonov.vknewsclient.domain.entity.StatisticItem
 import ru.paramonov.vknewsclient.domain.entity.StatisticType
-import ru.paramonov.vknewsclient.ui.theme.VKRed
+import ru.paramonov.vknewsclient.presentation.ui.theme.VKRed
 
 @Composable
 fun PostCard(
