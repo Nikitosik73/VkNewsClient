@@ -7,8 +7,7 @@ import ru.paramonov.vknewsclient.di.annotation.ApplicationScope
 import ru.paramonov.vknewsclient.di.module.DataModule
 import ru.paramonov.vknewsclient.di.module.NetworkModule
 import ru.paramonov.vknewsclient.di.module.ViewModelModule
-import ru.paramonov.vknewsclient.domain.entity.FeedPost
-import ru.paramonov.vknewsclient.presentation.MainActivity
+import ru.paramonov.vknewsclient.presentation.viewmodelfactory.ViewModelFactory
 
 @ApplicationScope
 @Component(
@@ -20,7 +19,7 @@ import ru.paramonov.vknewsclient.presentation.MainActivity
 )
 interface ApplicationComponent {
 
-    fun inject(activity: MainActivity)
+    fun getViewModelFactory(): ViewModelFactory
     
     fun getCommentsScreenFactory(): CommentsScreenSubcomponent.Factory
 

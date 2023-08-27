@@ -25,9 +25,7 @@ import ru.paramonov.vknewsclient.presentation.screens.newsfeed.NewsFeedScreen
 import ru.paramonov.vknewsclient.presentation.viewmodelfactory.ViewModelFactory
 
 @Composable
-fun MainScreen(
-    viewModelFactory: ViewModelFactory
-) {
+fun MainScreen() {
     val navigationState = rememberNavigationState()
 
     Scaffold(
@@ -77,7 +75,6 @@ fun MainScreen(
             navHostController = navigationState.navHostController,
             newsFeedScreenContent = {
                 NewsFeedScreen(
-                    viewModelFactory = viewModelFactory,
                     paddingValues = innerPadding,
                     onCommentsClickListener = {
                         navigationState.navigateToComments(it)
