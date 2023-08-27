@@ -18,10 +18,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
+import ru.paramonov.vknewsclient.domain.entity.Profile
 import ru.paramonov.vknewsclient.navigation.AppNavGraph
 import ru.paramonov.vknewsclient.navigation.rememberNavigationState
 import ru.paramonov.vknewsclient.presentation.screens.comments.CommentsScreen
 import ru.paramonov.vknewsclient.presentation.screens.newsfeed.NewsFeedScreen
+import ru.paramonov.vknewsclient.presentation.screens.profile.ProfileScreen
 import ru.paramonov.vknewsclient.presentation.viewmodelfactory.ViewModelFactory
 
 @Composable
@@ -88,7 +90,12 @@ fun MainScreen() {
                 )
             },
             favoriteScreenContent = { TextCounter(name = "Favorite") },
-            profileScreenContent = { TextCounter(name = "Profile") }
+            profileScreenContent = {
+                ProfileScreen(
+                    paddingValues = innerPadding,
+                    profile = Profile()
+                )
+            }
         )
     }
 }
