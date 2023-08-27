@@ -1,5 +1,6 @@
 package ru.paramonov.vknewsclient.data.repository
 
+import android.util.Log
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
 import kotlinx.coroutines.CoroutineScope
@@ -71,6 +72,7 @@ class NewsFeedRepositoryImpl @Inject constructor(
         checkAuthStateEvents.emit(Unit)
         checkAuthStateEvents.collect {
             val currentToken = token
+            Log.d("token", currentToken.toString())
             val loggedIn = currentToken != null && currentToken.isValid
             val authStata = if (loggedIn) AuthState.Authorized else AuthState.NotAuthorized
             emit(authStata)
