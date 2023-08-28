@@ -5,6 +5,7 @@ import retrofit2.http.Query
 import ru.paramonov.vknewsclient.data.network.model.NewsFeedResponseDto
 import ru.paramonov.vknewsclient.data.network.model.comments.CommentsResponseDto
 import ru.paramonov.vknewsclient.data.network.model.likes.LikesCountResponseDto
+import ru.paramonov.vknewsclient.data.network.model.profile.ProfileResponseDto
 
 interface ApiService {
 
@@ -53,6 +54,11 @@ interface ApiService {
         @Query(EXTENDED) extended: Int = 1,
         @Query(FIELDS) field: String = "photo_200"
     ): CommentsResponseDto
+
+    @GET("account.getProfileInfo?v=5.131")
+    suspend fun getProfileInfo(
+        @Query(ACCESS_TOKEN) token: String
+    ): ProfileResponseDto
 
     companion object {
         private const val ACCESS_TOKEN = "access_token"

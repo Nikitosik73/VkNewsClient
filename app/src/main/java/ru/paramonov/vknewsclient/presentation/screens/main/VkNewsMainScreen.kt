@@ -92,8 +92,7 @@ fun MainScreen() {
             favoriteScreenContent = { TextCounter(name = "Favorite") },
             profileScreenContent = {
                 ProfileScreen(
-                    paddingValues = innerPadding,
-                    profile = Profile()
+                    paddingValues = innerPadding
                 )
             }
         )

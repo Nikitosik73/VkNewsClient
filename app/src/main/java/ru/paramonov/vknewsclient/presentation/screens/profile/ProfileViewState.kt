@@ -9,6 +9,6 @@ sealed class ProfileViewState {
     object Loading : ProfileViewState()
 
     data class ProfileContent(
-        val profile: Profile? = null,
+        val profile: Profile
     ) : ProfileViewState()
 }
