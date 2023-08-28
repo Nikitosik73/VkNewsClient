@@ -6,6 +6,7 @@ import ru.paramonov.vknewsclient.data.network.model.NewsFeedResponseDto
 import ru.paramonov.vknewsclient.data.network.model.comments.CommentsResponseDto
 import ru.paramonov.vknewsclient.data.network.model.likes.LikesCountResponseDto
 import ru.paramonov.vknewsclient.data.network.model.profile.ProfileResponseDto
+import ru.paramonov.vknewsclient.data.network.model.profile.post.WallPostsResponseDto
 
 interface ApiService {
 
@@ -59,6 +60,13 @@ interface ApiService {
     suspend fun getProfileInfo(
         @Query(ACCESS_TOKEN) token: String
     ): ProfileResponseDto
+
+    @GET("wall.get?v=5.131")
+    suspend fun getWallPosts(
+        @Query(ACCESS_TOKEN) token: String,
+        @Query("filter") owner: String = "owner",
+        @Query(EXTENDED) extended: Int = 1
+    ): WallPostsResponseDto
 
     companion object {
         private const val ACCESS_TOKEN = "access_token"

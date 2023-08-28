@@ -1,6 +1,5 @@
 package ru.paramonov.vknewsclient.data.repository
 
-import android.util.Log
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
 import kotlinx.coroutines.CoroutineScope
