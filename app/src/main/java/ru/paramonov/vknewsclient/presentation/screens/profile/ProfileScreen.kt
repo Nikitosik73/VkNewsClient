@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -44,6 +46,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import ru.paramonov.vknewsclient.R
 import ru.paramonov.vknewsclient.domain.entity.Profile
+import ru.paramonov.vknewsclient.domain.entity.WallPost
 import ru.paramonov.vknewsclient.presentation.application.getApplicationComponent
 import ru.paramonov.vknewsclient.presentation.ui.theme.VkDefault
 
@@ -66,13 +69,15 @@ fun ProfileScreenContent(
     paddingValues: PaddingValues,
     viewState: State<ProfileViewState>
 ) {
-    when(val currentState = viewState.value) {
+    when (val currentState = viewState.value) {
         is ProfileViewState.ProfileContent -> {
             ProfileListItem(
                 paddingValues = paddingValues,
-                profile = currentState.profile
+                profile = currentState.profile,
+                posts = currentState.wallPosts
             )
         }
+
         is ProfileViewState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -81,6 +86,7 @@ fun ProfileScreenContent(
                 CircularProgressIndicator(color = VkDefault)
             }
         }
+
         is ProfileViewState.Initial -> {}
     }
 }
@@ -88,13 +94,14 @@ fun ProfileScreenContent(
 @Composable
 private fun ProfileListItem(
     paddingValues: PaddingValues,
-    profile: Profile
+    profile: Profile,
+    posts: List<WallPost>
 ) {
     LazyColumn(
         modifier = Modifier.padding(paddingValues),
         contentPadding = PaddingValues(
             top = 16.dp, bottom = 16.dp,
-            start = 2.dp, end = 2.dp
+            start = 4.dp, end = 4.dp
         ),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -104,6 +111,48 @@ private fun ProfileListItem(
         item {
             CardFullInformation(profile = profile)
         }
+        item {
+            Text(
+                text = "Все записи",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 12.dp)
+            )
+        }
+        items(
+            items = posts,
+            key = { it.id }
+        ) { wallPost ->
+            ProfilePostCard(
+                wallPost = wallPost,
+                onCommentsClickListener = {},
+                onLikesClickListener = {}
+            )
+        }
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = numberOfPosts(posts.size),
+                    color = MaterialTheme.colorScheme.onSecondary
+                )
+            }
+        }
+    }
+}
+
+private fun numberOfPosts(number: Int): String {
+    return if (number == 1) {
+        "$number запись"
+    } else if (number in 2..4) {
+        "$number записи"
+    } else {
+        "$number записей"
     }
 }
 
