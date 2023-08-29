@@ -66,7 +66,8 @@ fun MainScreen() {
                             selectedIconColor = MaterialTheme.colorScheme.onPrimary,
                             unselectedIconColor = MaterialTheme.colorScheme.onSecondary,
                             selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-                            unselectedTextColor = MaterialTheme.colorScheme.onSecondary
+                            unselectedTextColor = MaterialTheme.colorScheme.onSecondary,
+                            indicatorColor = MaterialTheme.colorScheme.primary
                         )
                     )
                 }
@@ -105,7 +106,7 @@ private fun TextCounter(name: String) {
 
     Text(
         text = "$name count: $count",
-        color = Color.Black,
+        color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier.clickable { count++ }
     )
 }

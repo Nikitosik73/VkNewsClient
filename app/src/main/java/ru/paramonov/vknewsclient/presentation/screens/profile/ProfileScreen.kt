@@ -60,21 +60,24 @@ fun ProfileScreen(
 
     ProfileScreenContent(
         paddingValues = paddingValues,
-        viewState = viewState
+        viewState = viewState,
+        viewModel = viewModel
     )
 }
 
 @Composable
 fun ProfileScreenContent(
     paddingValues: PaddingValues,
-    viewState: State<ProfileViewState>
+    viewState: State<ProfileViewState>,
+    viewModel: ProfileViewModel
 ) {
     when (val currentState = viewState.value) {
         is ProfileViewState.ProfileContent -> {
             ProfileListItem(
                 paddingValues = paddingValues,
                 profile = currentState.profile,
-                posts = currentState.wallPosts
+                posts = currentState.wallPosts,
+                viewModel = viewModel
             )
         }
 
@@ -95,7 +98,8 @@ fun ProfileScreenContent(
 private fun ProfileListItem(
     paddingValues: PaddingValues,
     profile: Profile,
-    posts: List<WallPost>
+    posts: List<WallPost>,
+    viewModel: ProfileViewModel
 ) {
     LazyColumn(
         modifier = Modifier.padding(paddingValues),
@@ -126,7 +130,9 @@ private fun ProfileListItem(
             ProfilePostCard(
                 wallPost = wallPost,
                 onCommentsClickListener = {},
-                onLikesClickListener = {}
+                onLikesClickListener = {
+                    viewModel.changeLikeStatus(wallPost = wallPost)
+                }
             )
         }
         item {
@@ -147,12 +153,16 @@ private fun ProfileListItem(
 }
 
 private fun numberOfPosts(number: Int): String {
-    return if (number == 1) {
-        "$number запись"
-    } else if (number in 2..4) {
-        "$number записи"
-    } else {
-        "$number записей"
+    return when (number) {
+        1 -> {
+            "$number запись"
+        }
+        in 2..4 -> {
+            "$number записи"
+        }
+        else -> {
+            "$number записей"
+        }
     }
 }
 

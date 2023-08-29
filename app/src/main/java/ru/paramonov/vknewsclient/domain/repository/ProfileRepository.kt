@@ -10,4 +10,6 @@ interface ProfileRepository {
     fun getProfileInfo(): Flow<Profile>
 
     fun getWallPosts(): StateFlow<List<WallPost>>
+
+    suspend fun changeLikesStatus(wallPost: WallPost)
 }
