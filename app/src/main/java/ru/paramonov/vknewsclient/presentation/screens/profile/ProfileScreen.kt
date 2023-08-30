@@ -1,5 +1,10 @@
 package ru.paramonov.vknewsclient.presentation.screens.profile
 
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +20,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
@@ -30,6 +34,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -117,7 +125,7 @@ private fun ProfileListItem(
         }
         item {
             Text(
-                text = "Все записи",
+                text = stringResource(R.string.all_posts),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(vertical = 4.dp, horizontal = 12.dp)
@@ -184,13 +192,7 @@ private fun ProfileCard(
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            AsyncImage(
-                model = profile.profilePhoto,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(shape = CircleShape)
-            )
+            AsyncImageAnimation(url = profile.profilePhoto)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = profile.fullName,
@@ -200,6 +202,40 @@ private fun ProfileCard(
             )
         }
     }
+}
+
+@Composable
+private fun AsyncImageAnimation(
+    url: String
+) {
+    var isNotCircle by remember {
+        mutableStateOf(false)
+    }
+
+    val percent by animateIntAsState(
+        targetValue = if (!isNotCircle) 50 else 4,
+        animationSpec = tween(
+            durationMillis = 500,
+            easing = LinearOutSlowInEasing
+        ),
+        label = "Circle")
+
+    val size by animateDpAsState(
+        targetValue = if (!isNotCircle) 150.dp else 300.dp,
+        animationSpec = tween(
+            durationMillis = 500,
+            easing = LinearOutSlowInEasing
+        ),
+        label = "Size")
+
+    AsyncImage(
+        model = url,
+        contentDescription = null,
+        modifier = Modifier
+            .size(size = size)
+            .clip(shape = RoundedCornerShape(percent = percent))
+            .clickable { isNotCircle = !isNotCircle }
+    )
 }
 
 @Composable
