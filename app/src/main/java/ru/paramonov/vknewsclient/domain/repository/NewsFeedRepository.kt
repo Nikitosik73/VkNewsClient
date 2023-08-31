@@ -21,4 +21,6 @@ interface NewsFeedRepository {
     suspend fun deletePost(feedPost: FeedPost)
 
     suspend fun changeLikeStatus(feedPost: FeedPost)
+
+    suspend fun changeLikesStatusComment(comment: PostComment, ownerId: Long)
 }

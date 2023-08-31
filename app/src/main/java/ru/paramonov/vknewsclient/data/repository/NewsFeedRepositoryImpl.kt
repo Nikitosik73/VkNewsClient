@@ -27,7 +27,7 @@ class NewsFeedRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val mapper: NewsFeedMapper,
     private val storage: VKPreferencesKeyValueStorage
-): NewsFeedRepository {
+) : NewsFeedRepository {
     private val token
         get() = VKAccessToken.restore(storage)
 
@@ -139,6 +139,12 @@ class NewsFeedRepositoryImpl @Inject constructor(
         refreshedListFlow.emit(feedPosts)
     }
 
+    private val _comments = mutableListOf<PostComment>()
+    private val comments: List<PostComment>
+        get() = _comments.toList()
+
+    private val refreshedListComments = MutableSharedFlow<List<PostComment>>()
+
     override fun getComments(feedPost: FeedPost): Flow<List<PostComment>> = flow {
         delay(2000)
         val response = apiService.getComments(
@@ -146,10 +152,41 @@ class NewsFeedRepositoryImpl @Inject constructor(
             ownerId = feedPost.communityId,
             postId = feedPost.id
         )
-        emit(mapper.mapResponseToPostComments(response = response))
-    }.retry {
+        val commentList = mapper.mapResponseToPostComments(response = response)
+        _comments.clear()
+        _comments.addAll(commentList)
+        emit(comments)
+    }.mergeWith(another = refreshedListComments).retry {
         delay(RETRY_TIMEOUT_MILLIS)
         true
+    }
+
+    override suspend fun changeLikesStatusComment(comment: PostComment, ownerId: Long) {
+        val response = if (comment.isLiked) {
+            apiService.deleteLikeComment(
+                token = getAccessToken(),
+                ownerId = ownerId,
+                itemId = comment.id
+            )
+        } else {
+            apiService.addLikeComment(
+                token = getAccessToken(),
+                ownerId = ownerId,
+                itemId = comment.id
+            )
+        }
+        val modifiedLikes = response.likes.count
+        val modifiedStatisticsComments = comment.likes.toMutableList().apply {
+            removeIf { it.type == StatisticType.LIKES }
+            add(StatisticItem(type = StatisticType.LIKES, count = modifiedLikes))
+        }
+        val modifiedComment = comment.copy(
+            likes = modifiedStatisticsComments,
+            isLiked = !comment.isLiked
+        )
+        val currentCommentIndex = _comments.indexOf(comment)
+        _comments[currentCommentIndex] = modifiedComment
+        refreshedListComments.emit(comments)
     }
 
     private fun getAccessToken(): String {

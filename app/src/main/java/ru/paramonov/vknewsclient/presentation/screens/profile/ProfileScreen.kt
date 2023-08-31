@@ -118,6 +118,14 @@ private fun ProfileListItem(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         item {
+            Text(
+                text = "Профиль",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
+        }
+        item {
             ProfileCard(profile = profile)
         }
         item {
