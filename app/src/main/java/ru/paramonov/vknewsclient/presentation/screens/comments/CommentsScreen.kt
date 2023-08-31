@@ -1,6 +1,7 @@
 package ru.paramonov.vknewsclient.presentation.screens.comments
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -41,7 +44,10 @@ import coil.compose.AsyncImage
 import ru.paramonov.vknewsclient.R
 import ru.paramonov.vknewsclient.domain.entity.FeedPost
 import ru.paramonov.vknewsclient.domain.entity.PostComment
+import ru.paramonov.vknewsclient.domain.entity.StatisticItem
+import ru.paramonov.vknewsclient.domain.entity.StatisticType
 import ru.paramonov.vknewsclient.presentation.application.getApplicationComponent
+import ru.paramonov.vknewsclient.presentation.ui.theme.VKRed
 import ru.paramonov.vknewsclient.presentation.ui.theme.VkDefault
 
 @Composable
@@ -58,22 +64,26 @@ fun CommentsScreen(
 
     CommentsScreenContent(
         screenState = screenState,
-        onBackPressed = onBackPressed
+        onBackPressed = onBackPressed,
+         viewModel = viewModel
     )
 }
 
 @Composable
 private fun CommentsScreenContent(
     screenState: State<CommentsScreenState>,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    viewModel: CommentsViewModel
 ) {
     when (val currentState = screenState.value) {
         is CommentsScreenState.Comments -> {
             Comments(
                 comments = currentState.comments,
-                onBackPressed = onBackPressed
+                onBackPressed = onBackPressed,
+                viewModel = viewModel
             )
         }
+
         is CommentsScreenState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -82,6 +92,7 @@ private fun CommentsScreenContent(
                 CircularProgressIndicator(color = VkDefault)
             }
         }
+
         is CommentsScreenState.Initial -> {}
     }
 }
@@ -90,7 +101,8 @@ private fun CommentsScreenContent(
 @Composable
 fun Comments(
     comments: List<PostComment>,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    viewModel: CommentsViewModel
 ) {
     Scaffold(
         topBar = {
@@ -124,9 +136,14 @@ fun Comments(
         ) {
             items(
                 items = comments,
-                key = { it.id }
+                key = { it.fromId }
             ) { comment ->
-                CommentItem(comment = comment)
+                CommentItem(
+                    comment = comment,
+                    onLikeClickListener = {
+                        viewModel.changeLikeStatusComments(comment = comment)
+                    }
+                )
             }
         }
     }
@@ -134,7 +151,8 @@ fun Comments(
 
 @Composable
 fun CommentItem(
-    comment: PostComment
+    comment: PostComment,
+    onLikeClickListener: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -143,7 +161,8 @@ fun CommentItem(
             .padding(
                 horizontal = 16.dp,
                 vertical = 4.dp
-            )
+            ),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
             model = comment.avatarUrl,
@@ -153,23 +172,65 @@ fun CommentItem(
                 .clip(shape = CircleShape)
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Column {
-            Text(
-                text = comment.authorName,
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = comment.commentText,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = comment.datePublication,
-                color = MaterialTheme.colorScheme.onSecondary,
-                fontSize = 12.sp
+        Row(
+            modifier = Modifier.weight(1f)
+        ) {
+            Column {
+                Text(
+                    text = comment.authorName,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = comment.commentText,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = comment.datePublication,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontSize = 12.sp
+                )
+            }
+        }
+        Row {
+            val itemLike = comment.likes.getItemWithType(StatisticType.LIKES)
+            ImageWithText(
+                iconResId = if (comment.isLiked) R.drawable.ic_like_set else R.drawable.ic_like,
+                text = itemLike.count.toString(),
+                tint = if (comment.isLiked) VKRed else MaterialTheme.colorScheme.onSecondary,
+                onItemClickListener = onLikeClickListener
             )
         }
+    }
+}
+
+private fun List<StatisticItem>.getItemWithType(type: StatisticType): StatisticItem {
+    return this.find { it.type == type } ?: throw IllegalStateException("Cannot find be type")
+}
+
+@Composable
+private fun ImageWithText(
+    iconResId: Int,
+    text: String,
+    onItemClickListener: () -> Unit,
+    tint: Color = MaterialTheme.colorScheme.onSecondary
+) {
+    Row(
+        modifier = Modifier.clickable { onItemClickListener() },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(id = iconResId),
+            contentDescription = null,
+            tint = tint,
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = text,
+            color = MaterialTheme.colorScheme.onSecondary
+        )
     }
 }

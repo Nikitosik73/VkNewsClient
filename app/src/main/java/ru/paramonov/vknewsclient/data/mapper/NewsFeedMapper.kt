@@ -56,10 +56,15 @@ class NewsFeedMapper @Inject constructor(){
             val profile = profiles.firstOrNull { it.id == comment.fromId } ?: continue
             val postComment = PostComment(
                 id = comment.id,
+                fromId = comment.fromId,
                 authorName = "${profile.lastName} ${profile.firstName}",
                 commentText = comment.text,
                 datePublication = mapTimestampToDate(comment.date),
-                avatarUrl = profile.photoUrl
+                avatarUrl = profile.photoUrl,
+                likes = listOf(
+                    StatisticItem(type = StatisticType.LIKES, count = comment.likes.count)
+                ),
+                isLiked = comment.likes.userLikes > 0
             )
             result.add(postComment)
         }

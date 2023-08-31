@@ -53,8 +53,25 @@ interface ApiService {
         @Query(OWNER_ID) ownerId: Long,
         @Query(POST_ID) postId: Long,
         @Query(EXTENDED) extended: Int = 1,
-        @Query(FIELDS) field: String = "photo_200"
+        @Query(FIELDS) field: String = "photo_200",
+        @Query("need_likes") likes: Int = 1
     ): CommentsResponseDto
+
+    @GET("likes.add?v=5.131")
+    suspend fun addLikeComment(
+        @Query(ACCESS_TOKEN) token: String,
+        @Query(TYPE) type: String = TYPE_COMMENT,
+        @Query(OWNER_ID) ownerId: Long,
+        @Query(ITEM_ID) itemId: Long
+    ): LikesCountResponseDto
+
+    @GET("likes.delete?v=5.131")
+    suspend fun deleteLikeComment(
+        @Query(ACCESS_TOKEN) token: String,
+        @Query(TYPE) type: String = TYPE_COMMENT,
+        @Query(OWNER_ID) ownerId: Long,
+        @Query(ITEM_ID) itemId: Long
+    ): LikesCountResponseDto
 
     @GET("account.getProfileInfo?v=5.131")
     suspend fun getProfileInfo(
@@ -76,6 +93,7 @@ interface ApiService {
         private const val TYPE = "type"
         private const val TYPE_POST = "post"
         private const val TYPE_WALL = "wall"
+        private const val TYPE_COMMENT = "comment"
         private const val START_FROM = "start_from"
         private const val POST_ID = "post_id"
         private const val EXTENDED = "extended"
