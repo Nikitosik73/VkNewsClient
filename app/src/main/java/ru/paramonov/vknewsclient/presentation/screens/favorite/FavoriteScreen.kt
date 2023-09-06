@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -95,7 +95,7 @@ private fun EmptyFavorite() {
             modifier = Modifier.padding(8.dp)
         ) {
             Icon(
-                imageVector = Icons.Rounded.Favorite,
+                imageVector = Icons.Outlined.FavoriteBorder,
                 contentDescription = null,
                 modifier = Modifier.size(56.dp),
                 tint = VKRed
@@ -121,7 +121,7 @@ private fun FavoriteListItem(
         modifier = Modifier.padding(paddingValues = paddingValues),
         contentPadding = PaddingValues(
             top = 16.dp,
-            bottom = 16.dp,
+            bottom = 8.dp,
             start = 8.dp,
             end = 8.dp
         ),
