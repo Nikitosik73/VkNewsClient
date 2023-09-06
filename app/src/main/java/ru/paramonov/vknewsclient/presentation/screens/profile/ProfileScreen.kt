@@ -112,7 +112,7 @@ private fun ProfileListItem(
     LazyColumn(
         modifier = Modifier.padding(paddingValues),
         contentPadding = PaddingValues(
-            top = 16.dp, bottom = 16.dp,
+            top = 16.dp, bottom = 8.dp,
             start = 4.dp, end = 4.dp
         ),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -156,7 +156,7 @@ private fun ProfileListItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(16.dp),
+                    .padding(top = 16.dp, bottom = 8.dp, end = 16.dp, start = 16.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -173,9 +173,11 @@ private fun numberOfPosts(number: Int): String {
         1 -> {
             "$number запись"
         }
+
         in 2..4 -> {
             "$number записи"
         }
+
         else -> {
             "$number записей"
         }
@@ -226,7 +228,8 @@ private fun AsyncImageAnimation(
             durationMillis = 500,
             easing = LinearOutSlowInEasing
         ),
-        label = "Circle")
+        label = "Circle"
+    )
 
     val size by animateDpAsState(
         targetValue = if (!isNotCircle) 150.dp else 300.dp,
@@ -234,7 +237,8 @@ private fun AsyncImageAnimation(
             durationMillis = 500,
             easing = LinearOutSlowInEasing
         ),
-        label = "Size")
+        label = "Size"
+    )
 
     AsyncImage(
         model = url,

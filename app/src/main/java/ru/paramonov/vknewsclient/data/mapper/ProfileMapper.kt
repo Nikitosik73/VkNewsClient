@@ -32,10 +32,10 @@ class ProfileMapper @Inject constructor() {
         val result = mutableListOf<WallPost>()
 
         val posts = response.wallPostContent.posts
-        val profile = response.wallPostContent.profiles
+        val profiles = response.wallPostContent.profiles
 
         for (post in posts) {
-            val profile = profile.firstOrNull { it.id == post.ownerId }?: continue
+            val profile = profiles.firstOrNull { it.id == post.ownerId }?: continue
 
             val wallPost = WallPost(
                 id = post.id,
@@ -51,7 +51,7 @@ class ProfileMapper @Inject constructor() {
                     StatisticItem(type = StatisticType.COMMENTS, count = post.comments.count),
                     StatisticItem(type = StatisticType.LIKES, count = post.likes.count)
                 ),
-                isLiked = post.likes.count > 0
+                isLiked = post.likes.userLikes > 0
             )
             result.add(wallPost)
         }
