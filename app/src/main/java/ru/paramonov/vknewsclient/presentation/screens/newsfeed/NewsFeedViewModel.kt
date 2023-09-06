@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import ru.paramonov.vknewsclient.domain.entity.FeedPost
+import ru.paramonov.vknewsclient.domain.usecase.AddToFavoritesUseCase
 import ru.paramonov.vknewsclient.domain.usecase.ChangeLikeStatusUseCase
 import ru.paramonov.vknewsclient.domain.usecase.DeletePostUseCase
 import ru.paramonov.vknewsclient.domain.usecase.GetAllNewsFeedUseCase
@@ -23,7 +24,8 @@ class NewsFeedViewModel @Inject constructor(
     private val getAllNewsFeedUseCase: GetAllNewsFeedUseCase,
     private val loadNextDataUseCase: LoadNextDataUseCase,
     private val changeLikeStatusUseCase: ChangeLikeStatusUseCase,
-    private val deletePostUseCase: DeletePostUseCase
+    private val deletePostUseCase: DeletePostUseCase,
+    private val addToFavoritesUseCase: AddToFavoritesUseCase
 ) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
@@ -61,5 +63,10 @@ class NewsFeedViewModel @Inject constructor(
 
     fun deletePost(feedPost: FeedPost) = viewModelScope.launch(exceptionHandler) {
         deletePostUseCase(feedPost = feedPost)
+    }
+
+    fun addToFavorites(feedPost: FeedPost) = viewModelScope.launch(exceptionHandler) {
+        Log.d("add_database", feedPost.toString())
+        addToFavoritesUseCase(feedPost = feedPost)
     }
 }

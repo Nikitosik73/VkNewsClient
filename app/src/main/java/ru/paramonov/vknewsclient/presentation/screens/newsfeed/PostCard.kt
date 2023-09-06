@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,6 +47,7 @@ fun PostCard(
     feedPost: FeedPost,
     onCommentsClickListener: (StatisticItem) -> Unit,
     onLikesClickListener: (StatisticItem) -> Unit,
+    onAddClickListener: (FeedPost) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -55,7 +57,10 @@ fun PostCard(
                 .background(MaterialTheme.colorScheme.primary)
                 .padding(8.dp)
         ) {
-            PostHeader(feedPost = feedPost)
+            PostHeader(
+                feedPost = feedPost,
+                onAddClickListener = onAddClickListener
+            )
             Spacer(modifier = Modifier.height(8.dp))
             AnimationText(text = feedPost.contentText)
             Spacer(modifier = Modifier.height(8.dp))
@@ -103,7 +108,8 @@ private fun AnimationText(
 
 @Composable
 private fun PostHeader(
-    feedPost: FeedPost
+    feedPost: FeedPost,
+    onAddClickListener: (FeedPost) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -130,11 +136,13 @@ private fun PostHeader(
                 color = MaterialTheme.colorScheme.onSecondary
             )
         }
-        Icon(
-            imageVector = Icons.Rounded.MoreVert,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSecondary
-        )
+        IconButton(onClick = { onAddClickListener(feedPost) }) {
+            Icon(
+                imageVector = Icons.Rounded.MoreVert,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSecondary
+            )
+        }
     }
 }
 

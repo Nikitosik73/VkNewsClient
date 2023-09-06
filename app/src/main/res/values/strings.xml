@@ -11,5 +11,8 @@
     <string name="name_profile">Имя пользователя:</string>
     <string name="b_date">День Рождения:</string>
     <string name="all_posts">Все записи</string>
+    <string name="empty_favorites">Вы пока-что ничего не добавили в избранное.</string>
+    <string name="save_post">Сохранить</string>
+    <string name="cancel">Отмена</string>
     <integer name="com_vk_sdk_AppId">51730514</integer>
 </resources>

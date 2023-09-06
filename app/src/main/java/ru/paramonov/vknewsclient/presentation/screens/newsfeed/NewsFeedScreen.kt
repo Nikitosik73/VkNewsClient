@@ -10,22 +10,31 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import ru.paramonov.vknewsclient.R
 import ru.paramonov.vknewsclient.domain.entity.FeedPost
 import ru.paramonov.vknewsclient.presentation.application.getApplicationComponent
 import ru.paramonov.vknewsclient.presentation.ui.theme.VkDefault
@@ -64,6 +73,7 @@ private fun NewsFeedContent(
                 nextDataIsLoading = currentState.nextDataLoading
             )
         }
+
         is NewsFeedScreenState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -72,6 +82,7 @@ private fun NewsFeedContent(
                 CircularProgressIndicator(color = VkDefault)
             }
         }
+
         NewsFeedScreenState.Initial -> {}
     }
 }
@@ -128,6 +139,9 @@ private fun FeedPosts(
                         },
                         onLikesClickListener = { _ ->
                             viewModel.changeLikeStatus(feedPost)
+                        },
+                        onAddClickListener = {
+                            viewModel.addToFavorites(feedPost = feedPost)
                         }
                     )
                 }

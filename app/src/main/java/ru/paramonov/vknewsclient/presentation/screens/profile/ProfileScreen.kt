@@ -119,7 +119,7 @@ private fun ProfileListItem(
     ) {
         item {
             Text(
-                text = "Профиль",
+                text = stringResource(id = R.string.navigation_item_profile),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 12.dp)
@@ -306,7 +306,8 @@ private fun CardFullInformation(
                     ) {
                         append(text = profile.homeTown)
                     }
-                }
+                },
+                modifier = Modifier.padding(bottom = 8.dp)
             )
         }
     }
@@ -316,7 +317,8 @@ private fun CardFullInformation(
 private fun Information(
     icon: ImageVector,
     label: String,
-    value: AnnotatedString
+    value: AnnotatedString,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = Modifier
@@ -336,7 +338,8 @@ private fun Information(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = value,
-            color = MaterialTheme.colorScheme.onPrimary
+            color = MaterialTheme.colorScheme.onPrimary,
+            modifier = modifier
         )
     }
 }

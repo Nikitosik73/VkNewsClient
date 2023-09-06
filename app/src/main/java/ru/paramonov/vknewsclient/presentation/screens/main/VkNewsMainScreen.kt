@@ -1,6 +1,5 @@
 package ru.paramonov.vknewsclient.presentation.screens.main
 
-import androidx.compose.foundation.clickable
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -10,21 +9,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import ru.paramonov.vknewsclient.domain.entity.Profile
 import ru.paramonov.vknewsclient.navigation.AppNavGraph
 import ru.paramonov.vknewsclient.navigation.rememberNavigationState
 import ru.paramonov.vknewsclient.presentation.screens.comments.CommentsScreen
+import ru.paramonov.vknewsclient.presentation.screens.favorite.FavoriteScreen
 import ru.paramonov.vknewsclient.presentation.screens.newsfeed.NewsFeedScreen
 import ru.paramonov.vknewsclient.presentation.screens.profile.ProfileScreen
-import ru.paramonov.vknewsclient.presentation.viewmodelfactory.ViewModelFactory
 
 @Composable
 fun MainScreen() {
@@ -90,7 +83,11 @@ fun MainScreen() {
                     feedPost = feedPost
                 )
             },
-            favoriteScreenContent = { TextCounter(name = "Favorite") },
+            favoriteScreenContent = {
+                FavoriteScreen(
+                    paddingValues = innerPadding
+                )
+            },
             profileScreenContent = {
                 ProfileScreen(
                     paddingValues = innerPadding
@@ -100,13 +97,3 @@ fun MainScreen() {
     }
 }
 
-@Composable
-private fun TextCounter(name: String) {
-    var count by rememberSaveable { mutableIntStateOf(0) }
-
-    Text(
-        text = "$name count: $count",
-        color = MaterialTheme.colorScheme.onPrimary,
-        modifier = Modifier.clickable { count++ }
-    )
-}
