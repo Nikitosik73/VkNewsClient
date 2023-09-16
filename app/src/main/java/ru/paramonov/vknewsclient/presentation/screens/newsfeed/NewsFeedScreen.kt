@@ -22,10 +22,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import ru.paramonov.vknewsclient.R
 import ru.paramonov.vknewsclient.domain.entity.FeedPost
 import ru.paramonov.vknewsclient.presentation.application.getApplicationComponent
 import ru.paramonov.vknewsclient.presentation.ui.theme.VkDefault
@@ -99,7 +101,7 @@ private fun FeedPosts(
     ) {
         item {
             Text(
-                text = "Новости",
+                text = stringResource(R.string.news),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(horizontal = 8.dp)

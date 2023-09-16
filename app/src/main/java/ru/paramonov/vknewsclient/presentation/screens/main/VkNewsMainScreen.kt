@@ -135,7 +135,7 @@ private fun BottomNavItem(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Icon(
-                imageVector = item.icon,
+                imageVector = if (selectedItem) item.focusedIcon else item.unfocusedIcon,
                 contentDescription = null,
                 tint = contentColor
             )

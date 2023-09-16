@@ -65,7 +65,7 @@ fun CommentsScreen(
     CommentsScreenContent(
         screenState = screenState,
         onBackPressed = onBackPressed,
-         viewModel = viewModel
+        viewModel = viewModel
     )
 }
 
@@ -77,11 +77,15 @@ private fun CommentsScreenContent(
 ) {
     when (val currentState = screenState.value) {
         is CommentsScreenState.Comments -> {
-            Comments(
-                comments = currentState.comments,
-                onBackPressed = onBackPressed,
-                viewModel = viewModel
-            )
+            if (currentState.comments.isEmpty()) {
+                EmptyComments()
+            } else {
+                Comments(
+                    comments = currentState.comments,
+                    onBackPressed = onBackPressed,
+                    viewModel = viewModel
+                )
+            }
         }
 
         is CommentsScreenState.Loading -> {
@@ -94,6 +98,30 @@ private fun CommentsScreenContent(
         }
 
         is CommentsScreenState.Initial -> {}
+    }
+}
+
+@Composable
+private fun EmptyComments() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                modifier = Modifier.size(40.dp),
+                painter = painterResource(id = R.drawable.ic_comment),
+                contentDescription = null
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.empty_comments)
+            )
+        }
     }
 }
 

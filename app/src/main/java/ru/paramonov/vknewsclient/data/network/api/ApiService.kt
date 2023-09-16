@@ -54,7 +54,8 @@ interface ApiService {
         @Query(POST_ID) postId: Long,
         @Query(EXTENDED) extended: Int = 1,
         @Query(FIELDS) field: String = "photo_200",
-        @Query("need_likes") likes: Int = 1
+        @Query(NEED_LIKES) likes: Int = 1,
+        @Query(SORT) desc: String = "desc"
     ): CommentsResponseDto
 
     @GET("likes.add?v=5.131")
@@ -98,5 +99,7 @@ interface ApiService {
         private const val POST_ID = "post_id"
         private const val EXTENDED = "extended"
         private const val FIELDS = "fields"
+        private const val NEED_LIKES = "need_likes"
+        private const val SORT = "sort"
     }
 }
